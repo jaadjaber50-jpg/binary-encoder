@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Binary Matrix Pro | المصفّح الثنائي الاحترافي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Tajawal', sans-serif; background-color: #0b0f19; color: #e2e8f0; }
+        .code-font { font-family: 'JetBrains+Mono', monospace; }
+        .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between">
+    <header class="p-4 border-b border-gray-800 text-center">
+        <h1 class="text-2xl font-bold text-cyan-400">Binary Matrix Pro ⚡</h1>
+        <p class="text-sm text-gray-400">تطبيق تشفير وفك تشفير النصوص الثنائية</p>
+    </header>
+
+    <main class="container mx-auto p-4 max-w-3xl flex-grow flex flex-col gap-4">
+        <div class="glass-card p-4 rounded-xl">
+            <label class="block mb-2 text-sm font-medium">النص أو الشفرة الثنائية (Binary):</label>
+            <textarea id="inputText" rows="4" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-lg text-white code-font focus:outline-none focus:border-cyan-500" placeholder="اكتب نصاً هنا للتشفير أو أدخل أصفاراً وآحاداً لفك التشفير..."></textarea>
+        </div>
+
+        <div class="flex gap-2">
+            <button onclick="encodeText()" class="flex-1 bg-cyan-600 hover:bg-cyan-500 text-white font-bold py-3 rounded-lg transition">تشفير (Encode) 🔒</button>
+            <button onclick="decodeText()" class="flex-1 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-lg transition">فك التشفير (Decode) 🔓</button>
+        </div>
+
+        <div class="glass-card p-4 rounded-xl">
+            <label class="block mb-2 text-sm font-medium text-emerald-400">النتيجة:</label>
+            <textarea id="outputText" readonly rows="4" class="w-full p-3 bg-gray-950 border border-gray-800 rounded-lg text-emerald-300 code-font focus:outline-none" placeholder="ستظهر النتيجة هنا..."></textarea>
+        </div>
+    </main>
+
+    <footer class="p-4 text-center text-xs text-gray-500 border-t border-gray-800">
+        Binary Matrix Pro &copy; 2026 - جاهز للاستخدام والتثبيت كـ PWA
+    </footer>
+
+    <script>
+        function encodeText() {
+            const input = document.getElementById('inputText').value;
+            if (!input) return;
+            const binary = Array.from(new TextEncoder().encode(input))
+                .map(b => b.toString(2).padStart(8, '0'))
+                .join(' ');
+            document.getElementById('outputText').value = binary;
+        }
+
+        function decodeText() {
+            const input = document.getElementById('inputText').value.trim();
+            if (!input) return;
+            try {
+                const bytes = new Uint8Array(input.split(/\s+/).map(bin => parseInt(bin, 2)));
+                const decoded = new TextDecoder().decode(bytes);
+                document.getElementById('outputText').value = decoded;
+            } catch (e) {
+                document.getElementById('outputText').value = "خطأ: تأكد من إدخال شفرة ثنائية صحيحة (أصفار وآحاد).";
+            }
+        }
+    </script>
+</body>
+</html>
